@@ -1,5 +1,8 @@
 package ciphers
 
-func Rot13(s *string, encode int) *string {
-	return s
+type Rot13Cipher struct{}
+
+type Rot13Actions interface {
 }
+
+func (r *Rot13Cipher) Handle(s string, e int) {}

@@ -1,42 +1,70 @@
 package ciphers
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
 
 type Cipher struct {
+	Text    string
+	Pattern string
+	Result  string
+	atbash  AtbashCipher
+	caesar  CaesarCipher
+	rot13   Rot13Cipher
 }
 
-func (c Cipher) Handle(text *string, pattern string) *string {
-	opts := strings.Split(pattern, "-")
+func New(text string, pattern string) Cipher {
+	return Cipher{
+		Text:    text,
+		Pattern: pattern,
+	}
+}
+
+func (c *Cipher) Handle() (string, error) {
+	opts := strings.Split(c.Pattern, "-")
+
+	c.caesar = CaesarCipher{}
+	c.atbash = AtbashCipher{}
+	c.rot13 = Rot13Cipher{}
 
 	for i := range opts {
-		pat := strings.Split(opts[i], "")
+		pattern := strings.Split(opts[i], "")
 
-		encodeType, err := strconv.Atoi(pat[1])
+		encodeType, err := strconv.Atoi(pattern[1])
 
 		if err != nil {
 			panic("Could not define if the method is encoding or decoding")
 		}
 
-		switch pat[0] {
+		switch pattern[0] {
 		case "C":
 			{
-				text = Caesar(*text, encodeType)
+				textRes, err := c.caesar.Handle(c.Text, encodeType)
+
+				if err != nil {
+					return "", err
+				}
+				c.Text = textRes
 			}
 		case "A":
 			{
-				text = Atbash(text, encodeType)
+				textRes, err := c.atbash.Handle(c.Text, encodeType)
+
+				if err != nil {
+					return "", err
+				}
+				c.Text = textRes
 			}
 		case "R":
 			{
-				text = Rot13(text, encodeType)
+				c.Text = c.rot13.Handle(c.Text, encodeType)
 			}
 		default:
-			panic("Wrong cipher specified. Should be either C for Caesar, A for Atbash or R for ROT13")
+			return "", errors.New("wrong cipher specified. Should be either C for Caesar, A for Atbash or R for ROT13")
 		}
 	}
 
-	return text
+	return c.Text, nil
 }

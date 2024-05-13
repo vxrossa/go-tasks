@@ -2,17 +2,18 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"go-tasks/ciphers"
 	"log"
 	"os"
 	"strings"
 )
 
-func ReadInput(file string) string {
+func readInput(file string) (string, error) {
 	f, err := os.Open(file)
 
 	if err != nil {
-		log.Fatal("Could not open an input file")
+		return "", err
 	}
 
 	scanner := bufio.NewScanner(f)
@@ -23,30 +24,40 @@ func ReadInput(file string) string {
 		input += scanner.Text()
 	}
 
-	return input
+	return input, nil
 }
 
-func WriteInput(input *string) {
+func writeInput(input string) (int, error) {
 	output, err := os.Create("output.txt")
 
 	defer output.Close()
 
-	if err != nil {
-		panic("Could not create an output file")
-	}
-
-	_, err2 := output.WriteString(*input)
-	if err2 != nil {
-		panic("Error writing data")
-	}
+	res, err := output.WriteString(input)
+	return res, err
 }
 
 func main() {
-	txt := ReadInput("input.txt")
-	args := strings.Split(txt, ",")
+	text, err := readInput("input.txt")
 
-	cipher := ciphers.Cipher{}
-	res := cipher.Handle(&args[0], args[1])
+	if err != nil {
+		log.Fatal("Could not read the file")
+	}
 
-	WriteInput(res)
+	args := strings.Split(text, ",")
+
+	cipher := ciphers.New(args[0], args[1])
+
+	res, err := cipher.Handle()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(res)
+
+	_, err = writeInput(res)
+
+	if err != nil {
+		log.Fatal("Could not write input")
+	}
 }

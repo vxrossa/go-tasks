@@ -8,9 +8,15 @@ import (
 func TestCaesarEncode(t *testing.T) {
 	str := "abcdef"
 
-	res := ciphers.Caesar(str, 1)
+	cipher := ciphers.CaesarCipher{}
 
-	if *res != "xyzabc" {
+	res, err := cipher.Handle(str, 1)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if res != "xyzabc" {
 		t.Error("Caesar should encode a simple example correctly")
 	}
 }
@@ -18,9 +24,15 @@ func TestCaesarEncode(t *testing.T) {
 func TestCaesarDecode(t *testing.T) {
 	str := "xyzabc"
 
-	res := ciphers.Caesar(str, 0)
+	cipher := ciphers.CaesarCipher{}
 
-	if *res != "abcdef" {
+	res, err := cipher.Handle(str, 0)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if res != "abcdef" {
 		t.Error("Caesar should decode a simple example correctly")
 	}
 }
@@ -28,9 +40,15 @@ func TestCaesarDecode(t *testing.T) {
 func TestCaesarEncodeUppercase(t *testing.T) {
 	str := "ABCDEF"
 
-	res := ciphers.Caesar(str, 1)
+	cipher := ciphers.CaesarCipher{}
 
-	if *res != "XYZABC" {
+	res, err := cipher.Handle(str, 1)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if res != "XYZABC" {
 		t.Error("Caesar should encode uppercase letters correctly")
 	}
 }
@@ -38,9 +56,15 @@ func TestCaesarEncodeUppercase(t *testing.T) {
 func TestCaesarDecodeLowercase(t *testing.T) {
 	str := "xyzabc"
 
-	res := ciphers.Caesar(str, 0)
+	cipher := ciphers.CaesarCipher{}
 
-	if *res != "abcdef" {
+	res, err := cipher.Handle(str, 0)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if res != "abcdef" {
 		t.Error("Caesar should deocde uppercase letters correctly")
 	}
 }
