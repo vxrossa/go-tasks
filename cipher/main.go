@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"go-tasks/ciphers"
 	"log"
 	"os"
@@ -52,8 +51,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(res)
 
 	_, err = writeInput(res)
 

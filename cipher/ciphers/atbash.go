@@ -11,11 +11,11 @@ type AtbashActions interface {
 }
 
 func (a *AtbashCipher) HandleUppercase(l byte, isEncode bool) string {
-	return string(MAX_CHAR_CODE_LOWER - (int(l) - MIN_CHAR_CODE_UPPER))
+	return string(MAX_CHAR_CODE_UPPER - (int(l) - MIN_CHAR_CODE_UPPER))
 }
 
 func (a *AtbashCipher) HandleLowercase(l byte, isEncode bool) string {
-	return string(l)
+	return string(MAX_CHAR_CODE_LOWER - (int(l) - MIN_CHAR_CODE_LOWER))
 }
 
 func (a *AtbashCipher) Handle(s string, e int) (string, error) {

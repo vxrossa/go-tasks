@@ -57,10 +57,6 @@ func (c *Cipher) Handle() (string, error) {
 				}
 				c.Text = textRes
 			}
-		case "R":
-			{
-				c.Text = c.rot13.Handle(c.Text, encodeType)
-			}
 		default:
 			return "", errors.New("wrong cipher specified. Should be either C for Caesar, A for Atbash or R for ROT13")
 		}
